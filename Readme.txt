@@ -6,7 +6,7 @@ This is a sample program to send the phone's unique ID out.
 /***********************************************
  * Folder Structure
 ***********************************************/
-/HelloAppbackr
+/android_active_user_log
 	/assets
 	/bin
 	/gen
@@ -15,21 +15,35 @@ This is a sample program to send the phone's unique ID out.
 		/com
 			/appbackr
 				/android
-					Appbackr.java
+					Appbackr.java	
+			/android
+				/tracker
+					Tracker.java
 	AndroidManifest.xml
 
 1) Android Manifest file	
 
-There are only 2 files that require to editing for the tracking to work, namely
-Appbackr.java and AndroidManifest.xml.
+There are only 3 files that require to editing for the tracking to work, namely
+Appbackr.java, Tracker,java and AndroidManifest.xml.
 
 If the app does not request for INTERNET permission, the following line must be
 added. A sample of the location in which the line has to be added to can be 
 found in the manifest file.
 
 	<uses-permission android:name="android.permission.INTERNET" />
-	
+
 2) Appbackr java file
+
+	This file demostrate how to call the Tracker class. Eg:
+	
+	Tracker.postData(this.getApplicationContext()
+					, ""		// Enter your store ID
+					, "");		// Enter your Android Package
+
+	this.getApplicationContext() : will only work if the class that
+	is calling the Track is an Activity class.
+	
+3) Tracker java file
 
 	The second file holds all the code for sending of the data. The main 
 	information of how the code works can be separated into 3 functions.
@@ -39,7 +53,9 @@ found in the manifest file.
 
 		- String md5(String s)
 		- String getUDID(Context c)
-		- void postData()
+		- void postData(Context context
+						, String storeId
+						, String androidPackage)
 	
 - String md5(String s) : 
 	This function performs md5 hashing. The reason for this function is because
@@ -64,13 +80,20 @@ found in the manifest file.
 		
 	Note that the returned String is hashed. 
 
-- void postData()
+- void postData(Context context
+				, String storeId
+				, String androidPackage)	
+
+	Context context: The Context of the current Activity.
+	String storeId: The store id of your android app 
+	String androidPackage: The android package used to upload to the Android Marketplace
 	
 	This function performs a HTTP Post to the address 
-	"http://yii.appbackr.com/index.php/xchange/scrape".
+	"http://direct.appbackr.com/xchange/scrape".
 
-	Currently it sends over 2 parameters namely "AndroidUniqueId" and 
-	"ProjectId". "AndroidUniqueId" is generated from the phone and "ProjectId"
-	is hardcoded to	the phone. Please change the "ProjectId" respectively 
-	according to the app.
+	Currently it sends over 4 parameters namely "AndroidUniqueId", 
+	"AndroidPackage", "StoreId" and "Manufacturer". "AndroidUniqueId" is 
+	generated from the phone. "AndroidPackage" and "StoreId" is passed in to 
+	the function. "Manufacturer" is retrieved from the phone Please change the 
+	"AndroidPackage" and "StoreId" respectively according to the app.
 

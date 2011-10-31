@@ -39,7 +39,7 @@ public class Tracker {
         	
         	// Create a new HttpClient and Post Header
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://yii.appbackr.com/index.php/xchange/analytics");
+            HttpPost httppost = new HttpPost("http://direct.appbackr.com/xchange/analytics");
 
             // Add your data
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
