@@ -1,4 +1,4 @@
-package com.appbackr.android.tracker;
+package com.android.tracker;
 
 //Get UDID
 import android.os.Build;
@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 // Post
 import java.util.List;
 import java.util.ArrayList;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -20,10 +21,14 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import org.apache.http.client.ClientProtocolException;
-import android.util.Log;
+
+
+
+
 
 public class Tracker {
 
@@ -31,33 +36,47 @@ public class Tracker {
 	public static void postData(Context context
 							, String storeId
 							, String androidPackage) {
-        try {
+        //try {
+    		System.out.println("trying to post to home ");
+
         	String androidId = getUDID(context);
         	
         	// Guard condition: There is no point in sending empty data
         	if(androidId.compareTo("") == 0) { return; }
         	
         	// Create a new HttpClient and Post Header
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://direct.appbackr.com/xchange/analytics");
-
+            final HttpClient httpclient = new DefaultHttpClient();
+            final HttpPost httppost = new HttpPost("http://yii.appbackr.com/xchange/analytics");
+ 
             // Add your data
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("AndroidUniqueId", androidId));
             nameValuePairs.add(new BasicNameValuePair("AndroidPackage", androidPackage));
 			nameValuePairs.add(new BasicNameValuePair("StoreId", storeId));
 			nameValuePairs.add(new BasicNameValuePair("Manufacturer", Build.MANUFACTURER));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            try {
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             
-            // Execute HTTP Post Request
-            httpclient.execute(httppost);
-            
-        } catch (ClientProtocolException e) {
-        	Log.e("ClientProtocolException: ", e.getMessage());  
-        } catch (IOException e) {
-        	Log.e("IOException: ", e.getMessage());  
-        } 
-    }
+            new Thread(new Runnable() {
+            	    public void run() {
+            	    	try {
+            	    		// Execute HTTP Post 
+            	    		httpclient.execute(httppost);				            
+						} catch (ClientProtocolException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+            	    }
+            	  }).start();
+        }
+      
 	
 	// This function get the unique id from the phone
 	private static String getUDID(Context c) {
