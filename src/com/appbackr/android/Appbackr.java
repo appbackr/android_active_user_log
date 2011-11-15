@@ -2,7 +2,7 @@ package com.appbackr.android;
 
 // emulator.exe @my_avd_market -sdcard android_sdcard.img
 
-import com.android.tracker.*;
+import com.appbackr.android.tracker.*;
 
 import android.app.Activity;
 import android.os.Bundle;
