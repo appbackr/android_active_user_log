@@ -1,4 +1,45 @@
+<<<<<<< HEAD
 package com.android.tracker;
+=======
+/*
+* Tracker.java 
+* 
+* android active user log
+* copyright (c) 2011 appbackr inc. 
+* 
+* version 0.8
+*
+* This project will get differenct device specific data to generate a unique
+* device ID to track active usage. 
+* It sends the generated device ID with the app ID and a self defined store ID
+* to a HTTP post endpoint to store the information on a server.
+* 
+* Contributers:
+* Louis Zeng (appbackr inc.)
+* Ethan Herdrick (appbackr inc.)
+* Philipp Berner (appbackr inc.)
+* 
+* MIT licence:
+* Permission is hereby granted, free of charge, to any person obtaining a 
+* copy of this software and associated documentation files (the "Software"), 
+* to deal in the Software without restriction, including without limitation the 
+* rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+* copies of the Software, and to permit persons to whom the Software is furnished 
+* to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in 
+* all copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS 
+* FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR 
+* IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+* 
+*/
+package com.appbackr.android.tracker;
+>>>>>>> deleted overhead files, commented code, added API token
 
 //Get UDID
 import android.os.Build;
@@ -30,29 +71,45 @@ import org.apache.http.client.ClientProtocolException;
 
 
 
+/**
+ * Tracker generates let you generate a unique ID and post if to a HTTP endpoint to store server side.
+ */
 public class Tracker {
 
-	// This function send data through post
-	public static void postData(Context context
-							, String storeId
-							, String androidPackage) {
-        //try {
-    		System.out.println("trying to post to home ");
 
+	/**
+	 * Gets an unique ID for the device where it's run and sends a HTTP post request to
+	 * a REST API endpoint. 
+	 * @param context application contect from Activity.getApplicationContext()
+	 * @param storeId self defined store ID to assosiate the app to a certain app store
+	 * @param androidPackage android package name
+	 * @param endPoint HTTP endpoint that is called to submit the loged information
+	 * @param apiAuthenticationToken Optional API authentication token for your endpoint
+	 */
+	public static void postData (Context context,
+							String storeId,
+							String androidPackage,
+							String endPoint,
+							String apiAuthenticationToken) {
+        try {
         	String androidId = getUDID(context);
         	
         	// Guard condition: There is no point in sending empty data
-        	if(androidId.compareTo("") == 0) { return; }
+        	if(androidId.compareTo("") == 0) { 
+				throw new RuntimeException('Empty endPoint location not allowed.');
+			}
         	
         	// Create a new HttpClient and Post Header
-            final HttpClient httpclient = new DefaultHttpClient();
-            final HttpPost httppost = new HttpPost("http://yii.appbackr.com/xchange/analytics");
- 
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(endPoint);
+
             // Add your data
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("AndroidUniqueId", androidId));
             nameValuePairs.add(new BasicNameValuePair("AndroidPackage", androidPackage));
 			nameValuePairs.add(new BasicNameValuePair("StoreId", storeId));
+			nameValuePairs.add(new BasicNameValuePair("apiAuthenticationToken", apiAuthenticationToken));
 			nameValuePairs.add(new BasicNameValuePair("Manufacturer", Build.MANUFACTURER));
             try {
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -61,6 +118,7 @@ public class Tracker {
 				e1.printStackTrace();
 			}
             
+			//execute post in new thread to not block application on slow server response
             new Thread(new Runnable() {
             	    public void run() {
             	    	try {
@@ -78,7 +136,11 @@ public class Tracker {
         }
       
 	
-	// This function get the unique id from the phone
+	/**
+	 * Gets unique device id as a MD5 hash.
+	 * @param c android application contact 
+	 * @return md5 hash ofavailable parameters from device and cell phone service provider
+	 */
 	private static String getUDID(Context c) {
 
 	   // Get some of the hardware information
