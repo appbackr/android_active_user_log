@@ -30,6 +30,8 @@ Tracker.postData(this.getApplicationContext(),
 
 # Code Overview
 
+All the code is located in com/appbackr/android/tracker
+
 ## Android Manifest file
 
 There are only 3 files that require to editing for the tracking to work, namely Appbackr.java, Tracker,java and AndroidManifest.xml.
