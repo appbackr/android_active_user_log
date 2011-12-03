@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-package com.android.tracker;
-=======
 /*
 * Tracker.java 
 * 
@@ -39,7 +36,6 @@ package com.android.tracker;
 * 
 */
 package com.appbackr.android.tracker;
->>>>>>> deleted overhead files, commented code, added API token
 
 //Get UDID
 import android.os.Build;
@@ -67,10 +63,6 @@ import java.math.BigInteger;
 
 import org.apache.http.client.ClientProtocolException;
 
-
-
-
-
 /**
  * Tracker generates let you generate a unique ID and post if to a HTTP endpoint to store server side.
  */
@@ -80,7 +72,13 @@ public class Tracker {
 	/**
 	 * Gets an unique ID for the device where it's run and sends a HTTP post request to
 	 * a REST API endpoint. 
-	 * @param context application contect from Activity.getApplicationContext()
+	 * Currently it sends over 4 parameters namely "AndroidUniqueId", 
+	 * "AndroidPackage", "StoreId" and "Manufacturer". "AndroidUniqueId" is 
+	 * generated from the phone. "AndroidPackage", "apiToken" and "StoreId" is passed in to 
+	 * the function. "Manufacturer" is retrieved from the phone Please change the 
+	 * "AndroidPackage" and "StoreId" respectively according to the app.
+	 * 
+	 * @param context The Context of the current Activity
 	 * @param storeId self defined store ID to assosiate the app to a certain app store
 	 * @param androidPackage android package name
 	 * @param endPoint HTTP endpoint that is called to submit the loged information
@@ -137,9 +135,26 @@ public class Tracker {
       
 	
 	/**
-	 * Gets unique device id as a MD5 hash.
+	 * Generates a unique ID for the device.
+	 * 
+	 * This function obtain the Unique ID from the phone. The Unique ID consist of
+	 * 	Build.BOARD + Build.BRAND + Build.CPU_ABI
+	 * 	+ Build.DEVICE + Build.DISPLAY + Build.FINGERPRINT + Build.HOST
+	 * 	+ Build.ID + Build.MANUFACTURER + Build.MODEL + Build.PRODUCT
+	 * 	+ Build.TAGS + Build.TYPE + Build.USER;
+	 * 	+ IMEI (GSM) or MEID/ESN (CDMA)
+	 * 	+ Android-assigned id
+	 * 
+	 * The Android ID may be changed everytime the user perform Factory Reset
+	 * I heard that IMEI values might not be unique because phone factory
+	 * might reuse IMEI values to cut cost.
+	 * 
+	 * While the ID might be different from the same device, but resetting of the
+	 * Android phone should not occur that often. The values should be close 
+	 * enough.
+	 *
 	 * @param c android application contact 
-	 * @return md5 hash ofavailable parameters from device and cell phone service provider
+	 * @return unique ID as md5 hash generated of available parameters from device and cell phone service provider
 	 */
 	private static String getUDID(Context c) {
 
@@ -164,7 +179,13 @@ public class Tracker {
 	   return md5(fullHash);
 	}
 	
-    // This function performs md5 hashing
+
+	/**
+	 * This function performs md5 hashing. The reason for this function is because
+	 * android package does not have any default md5 hashing function.
+	 * @param s string encode as md5 hash
+	 * @return md5 hash string
+	 */
 	private static String md5(String s) {
         try {
             // Create MD5 Hash
