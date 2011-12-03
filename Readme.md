@@ -55,7 +55,7 @@ Tracker.postData(this.getApplicationContext(),
 
 _this.getApplicationContext()_ : will only work if the class that is calling the Track is an Activity class.
 	
-**Tracker.java file**
+## Tracker.java file
 
 Holds all the code for sending of the data. The main information of how the code works can be separated into 3 functions. To make it work, copy the code for the following 3 functions and run the code for function "postData" in the "onCreate" function of the main Activity.
 
