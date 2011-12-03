@@ -18,7 +18,7 @@ Tracker.postData(this.getApplicationContext(),
     				""												// Enter your store ID
     				this.getApplicationContext().getPackageName(),	// You Android Package name
 					"",												// end point URL
-					"");
+					"");											// API authentication token
 ```
 
 **3. Add missing permissions to your Android manifest file to allow the code to collect the nessecary data and to send it back to the server. Sample implimentaton in AndroidManifest.xml**
