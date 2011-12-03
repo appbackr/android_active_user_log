@@ -30,7 +30,7 @@ Tracker.postData(this.getApplicationContext(),
 
 # Code Overview
 
-**Android Manifest file**
+## Android Manifest file
 
 There are only 3 files that require to editing for the tracking to work, namely Appbackr.java, Tracker,java and AndroidManifest.xml.
 
@@ -41,7 +41,7 @@ If the app does not request for INTERNET permission, the following line must be 
 <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 ```
 
-**Appbackr.java file**
+## Appbackr.java file
 
 Demostrate how to call the Tracker class. Eg:
 	
