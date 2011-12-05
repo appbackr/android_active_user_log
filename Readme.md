@@ -83,6 +83,7 @@ This file holds all the code for sending the data. The main information of how t
 
 # Contributors
 
+* Chris Beauchamp (Keep Safe)
 * Louis Zhang (appbackr inc.)
 * Ethan Herdrick (appbackr inc.)
 * Philipp Berner (appbackr inc.)
