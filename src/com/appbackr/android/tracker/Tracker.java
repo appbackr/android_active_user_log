@@ -12,7 +12,8 @@
 * to a HTTP post endpoint to store the information on a server.
 * 
 * Contributers:
-* Louis Zeng (appbackr inc.)
+* Chris Beauchamp (Keep Safe)
+* Louis Zhang (appbackr inc.)
 * Ethan Herdrick (appbackr inc.)
 * Philipp Berner (appbackr inc.)
 * 

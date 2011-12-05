@@ -12,7 +12,8 @@
 * to a HTTP post endpoint to store the information on a server.
 * 
 * Contributers:
-* Louis Zeng (appbackr inc.)
+* Chris Beauchamp (Keep Safe)
+* Louis Zhang (appbackr inc.)
 * Ethan Herdrick (appbackr inc.)
 * Philipp Berner (appbackr inc.)
 * 
@@ -60,7 +61,7 @@ public class Appbackr extends Activity {
 	  */
 	@Override
 	public void onResume(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onResume(savedInstanceState);
 		number = 0;
 	    sent = false;
 	        
@@ -83,10 +84,12 @@ public class Appbackr extends Activity {
 		final TextView textViewCount = (TextView) findViewById(R.id.count);
 		textViewCount.setText((number++).toString());
 		
-		Tracker.postData(this.getApplicationContext()
-							, ""
-							, "");
-		
+		Tracker.postData(this.getApplicationContext(),
+	        				""												// Enter your store ID
+	        				this.getApplicationContext().getPackageName(),	// You Android Package name
+							"",												// end point URL
+							"");
+									
 		final TextView textViewSuccess = (TextView) findViewById(R.id.success);
 		textViewSuccess.setText("Success: " + sent.toString());
 	}
